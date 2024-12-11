@@ -1,0 +1,43 @@
+.green-dot-list ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.green-dot-list li {
+  position: relative;
+  padding-left: 1.5em;
+}
+
+.green-dot-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.75em;
+  height: 0.75em;
+  background-color: #047b5d;
+  border-radius: 50%;
+}
+
+.red-dot-list ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.red-dot-list li {
+  position: relative;
+  padding-left: 1.5em;
+}
+
+.red-dot-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 0.75em;
+  height: 0.75em;
+  background-color: #e22c38;
+  border-radius: 50%;
+}
