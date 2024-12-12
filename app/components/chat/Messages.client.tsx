@@ -1,5 +1,5 @@
 import type { Message } from 'ai';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { classNames } from '~/utils/classNames';
 import { AssistantMessage } from './AssistantMessage';
 import { UserMessage } from './UserMessage';
@@ -8,6 +8,7 @@ import { db, chatId } from '~/lib/persistence/useChatHistory';
 import { forkChat } from '~/lib/persistence/db';
 import { toast } from 'react-toastify';
 import WithTooltip from '~/components/ui/Tooltip';
+import useCloneRepo from './GitCloneButton';
 
 interface MessagesProps {
   id?: string;
@@ -19,6 +20,17 @@ interface MessagesProps {
 export const Messages = React.forwardRef<HTMLDivElement, MessagesProps>((props: MessagesProps, ref) => {
   const { id, isStreaming = false, messages = [] } = props;
   const location = useLocation();
+  const { cloneRepo } = useCloneRepo({});
+
+  useEffect(() => {
+    const initRepo = async () => {
+      if (messages.length > 0) {
+        await cloneRepo();
+      }
+    };
+    
+    initRepo();
+  }, []);
 
   const handleRewind = (messageId: string) => {
     const searchParams = new URLSearchParams(location.search);
