@@ -1,5 +1,9 @@
 .NightSky {
   height: 100%;
-  background-image: radial-gradient(ellipse farthest-corner at center top, rgb(15, 45, 19) 0%, rgb(0, 0, 0) 100%);
+  background-image: radial-gradient(
+    ellipse farthest-corner at center top,
+    hsla(200, 100%, 15%, 1) 0%,
+    hsla(220, 90%, 1%, 1) 100%
+  );
   cursor: move;
 }

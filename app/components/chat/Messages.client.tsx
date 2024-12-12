@@ -9,6 +9,7 @@ import { forkChat } from '~/lib/persistence/db';
 import { toast } from 'react-toastify';
 import WithTooltip from '~/components/ui/Tooltip';
 import useCloneRepo from './GitCloneButton';
+import { LoadingDots } from '~/components/ui/LoadingDots';
 
 interface MessagesProps {
   id?: string;
@@ -28,7 +29,7 @@ export const Messages = React.forwardRef<HTMLDivElement, MessagesProps>((props: 
         await cloneRepo();
       }
     };
-    
+
     initRepo();
   }, []);
 
@@ -111,7 +112,9 @@ export const Messages = React.forwardRef<HTMLDivElement, MessagesProps>((props: 
           })
         : null}
       {isStreaming && (
-        <div className="text-center w-full text-bolt-elements-textSecondary i-svg-spinners:3-dots-fade text-4xl mt-4"></div>
+        <div className="text-center w-full text-bolt-elements-textSecondary text-4xl mt-4">
+          <LoadingDots />
+        </div>
       )}
     </div>
   );

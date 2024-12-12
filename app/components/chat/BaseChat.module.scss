@@ -24,7 +24,7 @@
 
 .RayContainer {
   --gradient-opacity: 0.85;
-  --ray-gradient: radial-gradient(rgba(98, 0, 133, var(--gradient-opacity)) 0%, rgba(0, 133, 97, 0) 100%);
+  --ray-gradient: radial-gradient(rgb(98, 193, 57, var(--gradient-opacity)) 0%, rgba(0, 133, 97, 0) 100%);
   --ray-gradient2: radial-gradient(rgba(0, 133, 97, var(--gradient-opacity)) 0%, rgba(0, 133, 97, 0) 100%);
   transition: opacity 0.25s linear;
   position: fixed;
