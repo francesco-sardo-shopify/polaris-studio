@@ -346,55 +346,50 @@ const componentsDir = process.cwd() + '/app/polaris/examples';
 const components = fs
   .readdirSync(componentsDir, { recursive: true })
   .filter((file) => file.toString().endsWith('.tsx'))
-  // deprecated components
-  .filter((file) => !file.toString().includes('legacy-'))
-  .filter((file) => !file.toString().includes('contextual-save-bar-'))
-  .filter((file) => !file.toString().includes('frame-'))
-  .filter((file) => !file.toString().includes('modal-'))
-  .filter((file) => !file.toString().includes('navigation-'))
-  .filter((file) => !file.toString().includes('setting-toggle-'))
-  .filter((file) => !file.toString().includes('sheet-'))
-  .filter((file) => !file.toString().includes('text-container-'))
-  .filter((file) => !file.toString().includes('top-bar-'))
-  .filter((file) => !file.toString().includes('deprecated-'))
-  // non needed for the demo
-  .filter((file) => !file.toString().includes('account-connection-'))
-  .filter((file) => !file.toString().includes('action-list-'))
-  .filter((file) => !file.toString().includes('autocomplete-'))
-  .filter((file) => !file.toString().includes('bleed-'))
-  .filter((file) => !file.toString().includes('callout-'))
-  .filter((file) => !file.toString().includes('choice-list-'))
-  .filter((file) => !file.toString().includes('combobox-'))
-  .filter((file) => !file.toString().includes('contextual-save-bar-'))
-  .filter((file) => !file.toString().includes('data-table-'))
-  .filter((file) => !file.toString().includes('date-picker-'))
-  .filter((file) => !file.toString().includes('drop-zone-'))
-  .filter((file) => !file.toString().includes('empty-state-'))
-  .filter((file) => !file.toString().includes('filters-with-'))
-  .filter((file) => !file.toString().includes('footer-'))
-  .filter((file) => !file.toString().includes('fullscreen-'))
-  .filter((file) => !file.toString().includes('grid-'))
-  .filter((file) => !file.toString().includes('keyboard-'))
-  .filter((file) => !file.toString().includes('listbox-'))
-  .filter((file) => !file.toString().includes('option-list-'))
-  .filter((file) => !file.toString().includes('popover-'))
-  .filter((file) => !file.toString().includes('progress-bar-'))
-  .filter((file) => !file.toString().includes('range-slider-'))
-  .filter((file) => !file.toString().includes('resource-item-'))
-  .filter((file) => !file.toString().includes('resource-list-'))
-  .filter((file) => !file.toString().includes('select-'))
-  .filter((file) => !file.toString().includes('skeleton-'))
-  .filter((file) => !file.toString().includes('tabs-'))
-  .filter((file) => !file.toString().includes('tag-'))
-  .filter((file) => !file.toString().includes('text-field-'))
-  .filter((file) => !file.toString().includes('toast-'))
-  .filter((file) => !file.toString().includes('tooltip-'))
+  // Only include components relevant to the demo
+  .filter((file) =>
+    [
+      'avatar-',
+      'badge-',
+      'banner-',
+      'block-stack-',
+      'box-',
+      'button-',
+      'card-',
+      'icon-',
+      'index-table-',
+      'layout-',
+      'link-',
+      'page-',
+      'pagination-',
+      'text-',
+      'thumbnail-',
+    ].some((prefix) => file.toString().startsWith(prefix)),
+  )
   .map((file) => [file.toString().replace('.tsx', ''), fs.readFileSync(componentsDir + '/' + file, 'utf8')]);
 
 const iconsDir = process.cwd() + '/app/polaris/icons';
 const icons = fs
   .readdirSync(iconsDir)
   .filter((file) => file.toString().endsWith('.yml'))
+  // Only include icons relevant to the demo
+  .filter((file) =>
+    [
+      'LocationFilledIcon',
+      'LogoInstagramIcon',
+      'LogoTikTokIcon',
+      'LogoYoutubeIcon',
+      'PersonIcon',
+      'WorkIcon',
+      'PhoneIcon',
+      'EmailIcon',
+      'DeliveryIcon',
+      'ReturnIcon',
+      'CalendarIcon',
+      'CashDollarIcon',
+      'InfoIcon',
+    ].some((prefix) => file.toString().startsWith(prefix)),
+  )
   .map((file) => file.replace('.yml', ''));
 
 const polaris = `
