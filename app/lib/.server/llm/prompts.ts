@@ -346,22 +346,50 @@ const componentsDir = process.cwd() + '/app/polaris/examples';
 const components = fs
   .readdirSync(componentsDir, { recursive: true })
   .filter((file) => file.toString().endsWith('.tsx'))
-  // deprecated components
-  .filter((file) => !file.toString().includes('legacy-'))
-  .filter((file) => !file.toString().includes('contextual-save-bar-'))
-  .filter((file) => !file.toString().includes('frame-'))
-  .filter((file) => !file.toString().includes('modal-'))
-  .filter((file) => !file.toString().includes('navigation-'))
-  .filter((file) => !file.toString().includes('setting-toggle-'))
-  .filter((file) => !file.toString().includes('sheet-'))
-  .filter((file) => !file.toString().includes('text-container-'))
-  .filter((file) => !file.toString().includes('top-bar-'))
+  // Only include components relevant to the demo
+  .filter((file) =>
+    [
+      'avatar-',
+      'badge-',
+      'banner-',
+      'block-stack-',
+      'box-',
+      'button-',
+      'card-',
+      'icon-',
+      'index-table-',
+      'layout-',
+      'link-',
+      'page-',
+      'pagination-',
+      'text-',
+      'thumbnail-',
+    ].some((prefix) => file.toString().startsWith(prefix)),
+  )
   .map((file) => [file.toString().replace('.tsx', ''), fs.readFileSync(componentsDir + '/' + file, 'utf8')]);
 
 const iconsDir = process.cwd() + '/app/polaris/icons';
 const icons = fs
   .readdirSync(iconsDir)
   .filter((file) => file.toString().endsWith('.yml'))
+  // Only include icons relevant to the demo
+  .filter((file) =>
+    [
+      'LocationFilledIcon',
+      'LogoInstagramIcon',
+      'LogoTikTokIcon',
+      'LogoYoutubeIcon',
+      'PersonIcon',
+      'WorkIcon',
+      'PhoneIcon',
+      'EmailIcon',
+      'DeliveryIcon',
+      'ReturnIcon',
+      'CalendarIcon',
+      'CashDollarIcon',
+      'InfoIcon',
+    ].some((prefix) => file.toString().startsWith(prefix)),
+  )
   .map((file) => file.replace('.yml', ''));
 
 const polaris = `

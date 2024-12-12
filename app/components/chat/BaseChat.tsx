@@ -9,10 +9,8 @@ import { Menu } from '~/components/sidebar/Menu.client';
 import { IconButton } from '~/components/ui/IconButton';
 import { Workbench } from '~/components/workbench/Workbench.client';
 import { classNames } from '~/utils/classNames';
-import { PROVIDER_LIST } from '~/utils/constants';
 import { Messages } from './Messages.client';
 import { SendButton } from './SendButton.client';
-import Cookies from 'js-cookie';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 import styles from './BaseChat.module.scss';
@@ -21,7 +19,6 @@ import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportCh
 import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
 
 import FilePreview from './FilePreview';
-
 import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
 
 const TEXTAREA_MIN_HEIGHT = 76;
@@ -43,7 +40,7 @@ interface BaseChatProps {
   provider?: ProviderInfo;
   setProvider?: (provider: ProviderInfo) => void;
   handleStop?: () => void;
-  sendMessage?: (event: React.UIEvent, messageInput?: string) => void;
+  sendMessage?: (event: React.UIEvent, messageInput?: string, chatStarted?: boolean) => void;
   handleInputChange?: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   enhancePrompt?: () => void;
   importChat?: (description: string, messages: Message[]) => Promise<void>;
@@ -81,84 +78,13 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     ref,
   ) => {
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
-    const [setApiKeys] = useState<Record<string, string>>(() => {
-      const savedKeys = Cookies.get('apiKeys');
-
-      if (savedKeys) {
-        try {
-          return JSON.parse(savedKeys);
-        } catch (error) {
-          console.error('Failed to parse API keys from cookies:', error);
-          return {};
-        }
-      }
-
-      return {};
-    });
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
     const [transcript, setTranscript] = useState('');
 
-    // Load enabled providers from cookies
-    const [enabledProviders, setEnabledProviders] = useState(() => {
-      const savedProviders = Cookies.get('providers');
-
-      if (savedProviders) {
-        try {
-          const parsedProviders = JSON.parse(savedProviders);
-          return PROVIDER_LIST.filter((p) => parsedProviders[p.name]);
-        } catch (error) {
-          console.error('Failed to parse providers from cookies:', error);
-          return PROVIDER_LIST;
-        }
-      }
-
-      return PROVIDER_LIST;
-    });
-
-    // Update enabled providers when cookies change
-    useEffect(() => {
-      const updateProvidersFromCookies = () => {
-        const savedProviders = Cookies.get('providers');
-
-        if (savedProviders) {
-          try {
-            const parsedProviders = JSON.parse(savedProviders);
-            setEnabledProviders(PROVIDER_LIST.filter((p) => parsedProviders[p.name]));
-          } catch (error) {
-            console.error('Failed to parse providers from cookies:', error);
-          }
-        }
-      };
-
-      updateProvidersFromCookies();
-
-      const interval = setInterval(updateProvidersFromCookies, 1000);
-
-      return () => clearInterval(interval);
-    }, [PROVIDER_LIST]);
-
     console.log(transcript);
     useEffect(() => {
-      // Load API keys from cookies on component mount
-      try {
-        const storedApiKeys = Cookies.get('apiKeys');
-
-        if (storedApiKeys) {
-          const parsedKeys = JSON.parse(storedApiKeys);
-
-          if (typeof parsedKeys === 'object' && parsedKeys !== null) {
-            setApiKeys(parsedKeys);
-          }
-        }
-      } catch (error) {
-        console.error('Error loading API keys from cookies:', error);
-
-        // Clear invalid cookie data
-        Cookies.remove('apiKeys');
-      }
-
       if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
@@ -206,7 +132,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
     const handleSendMessage = (event: React.UIEvent, messageInput?: string) => {
       if (sendMessage) {
-        sendMessage(event, messageInput);
+        sendMessage(event, messageInput, chatStarted);
 
         if (recognition) {
           recognition.abort(); // Stop current recognition
@@ -298,10 +224,10 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
             {!chatStarted && (
               <div id="intro" className="mt-[26vh] max-w-chat mx-auto text-center px-4 lg:px-0">
                 <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
-                  Polaris Studio
+                  Where ideas begin
                 </h1>
-                <p className="text-md lg:text-lg mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
-                  "Anything that Shopifolk can imagine, Polaris Studio can make real."
+                <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
+                  Bring ideas to life in seconds or get help on existing projects.
                 </p>
               </div>
             )}
@@ -341,15 +267,15 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       gradientUnits="userSpaceOnUse"
                       gradientTransform="rotate(-45)"
                     >
-                      <stop offset="0%" stopColor="#7b13ff" stopOpacity="0%"></stop>
-                      <stop offset="40%" stopColor="#a661ff" stopOpacity="80%"></stop>
-                      <stop offset="50%" stopColor="#7b13ff" stopOpacity="80%"></stop>
-                      <stop offset="100%" stopColor="#7b13ff" stopOpacity="0%"></stop>
+                      <stop offset="0%" stopColor="#1488fc" stopOpacity="0%"></stop>
+                      <stop offset="40%" stopColor="#1488fc" stopOpacity="80%"></stop>
+                      <stop offset="50%" stopColor="#1488fc" stopOpacity="80%"></stop>
+                      <stop offset="100%" stopColor="#1488fc" stopOpacity="0%"></stop>
                     </linearGradient>
                     <linearGradient id="shine-gradient">
                       <stop offset="0%" stopColor="white" stopOpacity="0%"></stop>
-                      <stop offset="40%" stopColor="white" stopOpacity="80%"></stop>
-                      <stop offset="50%" stopColor="white" stopOpacity="80%"></stop>
+                      <stop offset="40%" stopColor="#8adaff" stopOpacity="80%"></stop>
+                      <stop offset="50%" stopColor="#8adaff" stopOpacity="80%"></stop>
                       <stop offset="100%" stopColor="white" stopOpacity="0%"></stop>
                     </linearGradient>
                   </defs>
@@ -431,7 +357,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       minHeight: TEXTAREA_MIN_HEIGHT,
                       maxHeight: TEXTAREA_MAX_HEIGHT,
                     }}
-                    placeholder="What do you want to make?"
+                    placeholder="How can Bolt help you today?"
                     translate="no"
                   />
                   <ClientOnly>
@@ -439,7 +365,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       <SendButton
                         show={input.length > 0 || isStreaming || uploadedFiles.length > 0}
                         isStreaming={isStreaming}
-                        disabled={enabledProviders.length === 0}
                         onClick={(event) => {
                           if (isStreaming) {
                             handleStop?.();
@@ -499,7 +424,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                             !isModelSettingsCollapsed,
                         })}
                         onClick={() => setIsModelSettingsCollapsed(!isModelSettingsCollapsed)}
-                        disabled={enabledProviders.length === 0}
                       >
                         <div className={`i-ph:caret-${isModelSettingsCollapsed ? 'right' : 'down'} text-lg`} />
                         {isModelSettingsCollapsed ? <span className="text-xs">{model}</span> : <span />}

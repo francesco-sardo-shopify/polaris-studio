@@ -19,6 +19,7 @@ import { BaseChat } from './BaseChat';
 import Cookies from 'js-cookie';
 import type { ProviderInfo } from '~/utils/types';
 import { debounce } from '~/utils/debounce';
+import useCloneRepo from './GitCloneButton';
 
 const toastAnimation = cssTransition({
   enter: 'animated fadeInRight',
@@ -169,6 +170,8 @@ export const ChatImpl = memo(
       }
     }, [input, textareaRef]);
 
+    const { cloneRepo } = useCloneRepo({});
+
     const runAnimation = async () => {
       if (chatStarted) {
         return;
@@ -184,11 +187,15 @@ export const ChatImpl = memo(
       setChatStarted(true);
     };
 
-    const sendMessage = async (_event: React.UIEvent, messageInput?: string) => {
+    const sendMessage = async (_event: React.UIEvent, messageInput?: string, chatStarted?: boolean) => {
       const _input = messageInput || input;
 
       if (_input.length === 0 || isLoading) {
         return;
+      }
+
+      if (!chatStarted) {
+        await cloneRepo();
       }
 
       /**
