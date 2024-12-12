@@ -170,7 +170,7 @@ export const ChatImpl = memo(
       }
     }, [input, textareaRef]);
 
-    const { cloneRepo } = useCloneRepo({ importChat });
+    const { cloneRepo } = useCloneRepo({});
 
     const runAnimation = async () => {
       if (chatStarted) {
