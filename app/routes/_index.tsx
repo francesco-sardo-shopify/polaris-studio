@@ -6,7 +6,10 @@ import { Header } from '~/components/header/Header';
 import { NightSky } from '~/components/NightSky';
 
 export const meta: MetaFunction = () => {
-  return [{ title: 'Bolt' }, { name: 'description', content: 'Talk with Bolt, an AI assistant from StackBlitz' }];
+  return [
+    { title: 'Polaris Studio' },
+    { name: 'description', content: 'Talk with Polaris Studio, an AI assistant from Shopify' },
+  ];
 };
 
 export const loader = () => json({});

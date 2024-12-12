@@ -414,7 +414,10 @@ const polaris = `
   If the UI contains a congratulation message at the top, you MUST use a Banner component with tone="success".
   If the UI contains a two columns layout, you MUST use a Layout.Section component with variant="twoThirds".
   If the UI contains icons, you MUST use an Icon component with source={NameOfTheIcon}.
-  If the UI contains a table, you MUST use an IndexTable component. Badges with a positive tone should be colored green.
+  If the UI contains a table, you MUST use an IndexTable component.
+  Badges that represent "Active" status MUST be green.
+  Badges that represent "Draft" status MUST be blue.
+
 
 </knowledge_base>
 `;
