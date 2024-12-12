@@ -413,11 +413,19 @@ const polaris = `
 
   If the UI contains a congratulation message at the top, you MUST use a Banner component with tone="success".
   If the UI contains a two columns layout, you MUST use a Layout.Section component with variant="twoThirds".
-  If the UI contains icons, you MUST use an Icon component with source={NameOfTheIcon}.
+  If the UI contains icons, you MUST use an Icon component with source={NameOfTheIcon} and wrap it in a <div> with style={"max-width: 30px"}}, for example: <div style={"max-width: 30px"}><Icon source={NameOfTheIcon} /></div>
   If the UI contains a table, you MUST use an IndexTable component.
   Badges that represent "Active" status MUST be green.
   Badges that represent "Draft" status MUST be blue.
-
+  If the UI contains a contact list info (one per each line), you MUST use an icon at the beginning of each line:
+  - PersonIcon for the name
+  - WorkIcon for the job title
+  - PhoneIcon for the phone number
+  - EmailIcon for the third line
+  If the UI contains multiple icons in a row, you MUST use Social icons:
+  - LogoInstagramIcon
+  - LogoTiktokIcon
+  - LogoYoutubeIcon
 
 </knowledge_base>
 `;
