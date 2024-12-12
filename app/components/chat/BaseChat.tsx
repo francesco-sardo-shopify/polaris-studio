@@ -9,22 +9,19 @@ import { Menu } from '~/components/sidebar/Menu.client';
 import { IconButton } from '~/components/ui/IconButton';
 import { Workbench } from '~/components/workbench/Workbench.client';
 import { classNames } from '~/utils/classNames';
-import { MODEL_LIST, PROVIDER_LIST, initializeModelList } from '~/utils/constants';
+import { PROVIDER_LIST } from '~/utils/constants';
 import { Messages } from './Messages.client';
 import { SendButton } from './SendButton.client';
-import { APIKeyManager } from './APIKeyManager';
 import Cookies from 'js-cookie';
 import * as Tooltip from '@radix-ui/react-tooltip';
 
 import styles from './BaseChat.module.scss';
 import type { ProviderInfo } from '~/utils/types';
 import { ExportChatButton } from '~/components/chat/chatExportAndImport/ExportChatButton';
-import { ImportButtons } from '~/components/chat/chatExportAndImport/ImportButtons';
 import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
-import GitCloneButton from './GitCloneButton';
 
 import FilePreview from './FilePreview';
-import { ModelSelector } from '~/components/chat/ModelSelector';
+
 import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
 
 const TEXTAREA_MIN_HEIGHT = 76;
@@ -67,9 +64,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       chatStarted = false,
       isStreaming = false,
       model,
-      setModel,
-      provider,
-      setProvider,
       input = '',
       enhancingPrompt,
       handleInputChange,
@@ -77,7 +71,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
       enhancePrompt,
       sendMessage,
       handleStop,
-      importChat,
       exportChat,
       uploadedFiles = [],
       setUploadedFiles,
@@ -88,7 +81,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
     ref,
   ) => {
     const TEXTAREA_MAX_HEIGHT = chatStarted ? 400 : 200;
-    const [apiKeys, setApiKeys] = useState<Record<string, string>>(() => {
+    const [setApiKeys] = useState<Record<string, string>>(() => {
       const savedKeys = Cookies.get('apiKeys');
 
       if (savedKeys) {
@@ -102,7 +95,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
 
       return {};
     });
-    const [modelList, setModelList] = useState(MODEL_LIST);
     const [isModelSettingsCollapsed, setIsModelSettingsCollapsed] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [recognition, setRecognition] = useState<SpeechRecognition | null>(null);
@@ -166,10 +158,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
         // Clear invalid cookie data
         Cookies.remove('apiKeys');
       }
-
-      initializeModelList().then((modelList) => {
-        setModelList(modelList);
-      });
 
       if (typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -310,10 +298,10 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
             {!chatStarted && (
               <div id="intro" className="mt-[26vh] max-w-chat mx-auto text-center px-4 lg:px-0">
                 <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
-                  Where ideas begin
+                  Polaris Studio
                 </h1>
-                <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
-                  Bring ideas to life in seconds or get help on existing projects.
+                <p className="text-md lg:text-lg mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
+                  "Anything that Shopifolk can imagine, Polaris Studio can make real."
                 </p>
               </div>
             )}
@@ -353,46 +341,21 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       gradientUnits="userSpaceOnUse"
                       gradientTransform="rotate(-45)"
                     >
-                      <stop offset="0%" stopColor="#1488fc" stopOpacity="0%"></stop>
-                      <stop offset="40%" stopColor="#1488fc" stopOpacity="80%"></stop>
-                      <stop offset="50%" stopColor="#1488fc" stopOpacity="80%"></stop>
-                      <stop offset="100%" stopColor="#1488fc" stopOpacity="0%"></stop>
+                      <stop offset="0%" stopColor="#36F4A4" stopOpacity="0%"></stop>
+                      <stop offset="40%" stopColor="#36F4A4" stopOpacity="80%"></stop>
+                      <stop offset="50%" stopColor="#36F4A4" stopOpacity="80%"></stop>
+                      <stop offset="100%" stopColor="#36F4A4" stopOpacity="0%"></stop>
                     </linearGradient>
                     <linearGradient id="shine-gradient">
                       <stop offset="0%" stopColor="white" stopOpacity="0%"></stop>
-                      <stop offset="40%" stopColor="#8adaff" stopOpacity="80%"></stop>
-                      <stop offset="50%" stopColor="#8adaff" stopOpacity="80%"></stop>
+                      <stop offset="40%" stopColor="white" stopOpacity="80%"></stop>
+                      <stop offset="50%" stopColor="white" stopOpacity="80%"></stop>
                       <stop offset="100%" stopColor="white" stopOpacity="0%"></stop>
                     </linearGradient>
                   </defs>
                   <rect className={classNames(styles.PromptEffectLine)} pathLength="100" strokeLinecap="round"></rect>
                   <rect className={classNames(styles.PromptShine)} x="48" y="24" width="70" height="1"></rect>
                 </svg>
-                <div>
-                  <div className={isModelSettingsCollapsed ? 'hidden' : ''}>
-                    <ModelSelector
-                      key={provider?.name + ':' + modelList.length}
-                      model={model}
-                      setModel={setModel}
-                      modelList={modelList}
-                      provider={provider}
-                      setProvider={setProvider}
-                      providerList={PROVIDER_LIST}
-                      apiKeys={apiKeys}
-                    />
-                    {enabledProviders.length > 0 && provider && (
-                      <APIKeyManager
-                        provider={provider}
-                        apiKey={apiKeys[provider.name] || ''}
-                        setApiKey={(key) => {
-                          const newApiKeys = { ...apiKeys, [provider.name]: key };
-                          setApiKeys(newApiKeys);
-                          Cookies.set('apiKeys', JSON.stringify(newApiKeys));
-                        }}
-                      />
-                    )}
-                  </div>
-                </div>
                 <FilePreview
                   files={uploadedFiles}
                   imageDataList={imageDataList}
@@ -468,7 +431,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       minHeight: TEXTAREA_MIN_HEIGHT,
                       maxHeight: TEXTAREA_MAX_HEIGHT,
                     }}
-                    placeholder="How can Bolt help you today?"
+                    placeholder="What do you want to make?"
                     translate="no"
                   />
                   <ClientOnly>
@@ -553,12 +516,6 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                 </div>
               </div>
             </div>
-            {!chatStarted && (
-              <div className="flex justify-center gap-2">
-                {ImportButtons(importChat)}
-                <GitCloneButton importChat={importChat} />
-              </div>
-            )}
             {!chatStarted &&
               ExamplePrompts((event, messageInput) => {
                 if (isStreaming) {
