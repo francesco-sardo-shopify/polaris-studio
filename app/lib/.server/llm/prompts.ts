@@ -398,6 +398,10 @@ const polaris = `
   You ALWAYS use version 12.27.0 of @shopify/polaris and version 8.11.1 of @shopify/polaris-icons.
   You ALWAYS use Typescript, React and Vite.
 
+  You MUST ONLY edit the \`app/routes/_index.tsx\` file when implementing a UI.
+  You MUST NOT generate a new \`package.json\` file.
+  You MUST run \`npm install && npm run dev\` after you have generated the UI.
+
   You MUST ONLY use the components and icons mentioned in the examples below.
   <components>
     ${components.map(([file, component]: string[]) => `<${file}>\n${component}\n</${file}>`).join('\n    ')}
@@ -406,6 +410,11 @@ const polaris = `
   <icons>
     ${icons.map((icon: string) => `- ${icon}`).join('\n    ')}
   </icons>
+
+  If the UI contains a congratulation message at the top, you MUST use a Banner component with tone="success".
+  If the UI contains a two columns layout, you MUST use a Layout.Section component with variant="twoThirds".
+  If the UI contains icons, you MUST use an Icon component with source={NameOfTheIcon}.
+  If the UI contains a table, you MUST use an IndexTable component. Badges with a positive tone should be colored green.
 
 </knowledge_base>
 `;
