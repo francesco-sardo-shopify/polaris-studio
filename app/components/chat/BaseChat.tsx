@@ -358,7 +358,7 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
                       minHeight: TEXTAREA_MIN_HEIGHT,
                       maxHeight: TEXTAREA_MAX_HEIGHT,
                     }}
-                    placeholder="How can Polaris Studio help you today?"
+                    placeholder="What do you want to build today?"
                     translate="no"
                   />
                   <ClientOnly>
