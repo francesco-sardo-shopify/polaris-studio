@@ -40,7 +40,7 @@ export const LoadingDots = memo(() => {
   }, []);
 
   return (
-    <div className="flex justify-center items-end h-full gap-2">
+    <div className="flex justify-center flex-col items-center h-full gap-2">
       <img style={{ width: '40px', height: '40px' }} src={shoppy} />
       <div className="flex relative">
         <div className="text-bolt-elements-textPrimary text-sm">{loadingText}</div>
