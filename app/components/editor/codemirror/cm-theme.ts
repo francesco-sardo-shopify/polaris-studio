@@ -8,14 +8,11 @@ export const darkTheme = EditorView.theme({}, { dark: true });
 export const themeSelection = new Compartment();
 
 export function getTheme(theme: Theme, settings: EditorSettings = {}): Extension {
-  return [
-    getEditorTheme(settings),
-    theme === 'dark' ? themeSelection.of([getDarkTheme()]) : themeSelection.of([getLightTheme()]),
-  ];
+  return [getEditorTheme(settings), themeSelection.of([getDarkTheme()])];
 }
 
-export function reconfigureTheme(theme: Theme) {
-  return themeSelection.reconfigure(theme === 'dark' ? getDarkTheme() : getLightTheme());
+export function reconfigureTheme(_theme: Theme) {
+  return themeSelection.reconfigure(getDarkTheme());
 }
 
 function getEditorTheme(settings: EditorSettings) {

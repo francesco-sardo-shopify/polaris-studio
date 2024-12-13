@@ -154,7 +154,7 @@ const getStars = () => {
     };
 
     const Build = function () {
-      this.vel = 0.000001;
+      this.vel = 0.000000001;
       this.lim = 360;
       this.diff = 200;
       this.initPos = 100;
@@ -273,9 +273,9 @@ const getStars = () => {
     Build.prototype.draw = function () {
       this.$.clearRect(0, 0, this.canvas.width, this.canvas.height);
       cam.upd();
-      this.rotObj.x += 0.1;
-      this.rotObj.y += 0.1;
-      this.rotObj.z += 0.1;
+      this.rotObj.x += 0.025;
+      this.rotObj.y += 0.025;
+      this.rotObj.z += 0.025;
 
       for (let i = 0; i < this.varr.length; i++) {
         for (const val in this.calc[i]) {
