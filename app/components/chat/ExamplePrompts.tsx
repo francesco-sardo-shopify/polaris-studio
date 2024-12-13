@@ -2,26 +2,16 @@ import React from 'react';
 
 const EXAMPLE_PROMPTS = [
   { text: 'Eco-friendly insights module' },
-  { text: 'Shopify Voice Assistant' },
+  { text: 'Global maxima finder' },
   { text: 'Dynamic pricing engine' },
-  { text: 'Conversion rate optimizer' },
-  { text: 'Customer segmentation AI' },
-  { text: 'Fake customer reviews poster' },
-  { text: 'Themed box generator' },
+  { text: 'Customer segmentation AI tool' },
   { text: 'Accidental purchase insurance' },
   { text: 'Product recommendation engine' },
   { text: 'Dance party planner' },
-  { text: 'AI-powered shopping assistant' },
-  { text: 'Meme your product tool' },
   { text: 'Silly tagline generator' },
   { text: 'Tarot card sales predictor' },
-  { text: 'Daily giggle marketing prompt tool' },
   { text: 'Unobvious yet correct product name generator' },
-  { text: 'Checkout grabbag generator' },
-  { text: 'Obscene product name generator' },
-  { text: 'Boring performance metrics dashboard' },
-  { text: 'Global maxima finder' },
-  { text: 'Load-bearing feature creator' },
+  { text: 'Boring performance metrics dashboard' }
 ];
 
 export function ExamplePrompts(sendMessage?: { (event: React.UIEvent, messageInput?: string): void | undefined }) {
