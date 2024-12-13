@@ -23,6 +23,10 @@
   opacity: 1;
 }
 
+.Icon {
+  margin-left: -30px;
+}
+
 .RayContainer {
   --gradient-opacity: 0.85;
   --ray-gradient: radial-gradient(rgb(98, 193, 57, var(--gradient-opacity)) 0%, rgba(0, 133, 97, 0) 100%);
