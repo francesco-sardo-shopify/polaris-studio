@@ -10,7 +10,7 @@ export function Header() {
 
   return (
     <header
-      className={classNames('absolute flex items-center top-0 left-0 p-10 border-b h-[var(--header-height)]', {
+      className={classNames('absolute flex w-full items-center top-0 left-0 p-4 border-b h-[var(--header-height) z-2', {
         'border-transparent': !chat.started,
         'border-bolt-elements-borderColor': chat.started,
       })}
