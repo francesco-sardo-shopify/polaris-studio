@@ -154,7 +154,7 @@ const getStars = () => {
     };
 
     const Build = function () {
-      this.vel = 0.04;
+      this.vel = 0.000001;
       this.lim = 360;
       this.diff = 200;
       this.initPos = 100;
@@ -165,7 +165,6 @@ const getStars = () => {
 
     Build.prototype.go = function () {
       this.canvas = document.getElementById('canv');
-
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
       this.$ = canv.getContext('2d');
@@ -174,9 +173,73 @@ const getStars = () => {
       this.dist = [];
       this.calc = [];
 
+      // Load both images
+      this.shopImage = new Image();
+      this.shopImage.src = 'tobi.png';
+      this.bagImage = new Image();
+      this.bagImage.src = 'shopify-bag.png';
+
+      // Add regular stars
       for (let i = 0, len = num; i < len; i++) {
         this.add();
       }
+
+      // Add Shopify bag star
+      this.varr.push(
+        new threeD({
+          vtx: { x: rnd(), y: rnd(), z: rnd() },
+          sz: { x: 0, y: 0, z: 0 },
+          rot: { x: 20, y: -20, z: 0 },
+          pos: {
+            x: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+            y: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+            z: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+          },
+        }),
+      );
+      this.calc.push({
+        x: 360 * Math.random(),
+        y: 360 * Math.random(),
+        z: 360 * Math.random(),
+      });
+
+      // Add Tobi star
+      this.varr.push(
+        new threeD({
+          vtx: { x: rnd(), y: rnd(), z: rnd() },
+          sz: { x: 0, y: 0, z: 0 },
+          rot: { x: 20, y: -20, z: 0 },
+          pos: {
+            x: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+            y: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+            z: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+          },
+        }),
+      );
+      this.calc.push({
+        x: 360 * Math.random(),
+        y: 360 * Math.random(),
+        z: 360 * Math.random(),
+      });
+
+      // Add north star (existing code)
+      this.varr.push(
+        new threeD({
+          vtx: { x: rnd(), y: rnd(), z: rnd() },
+          sz: { x: 0, y: 0, z: 0 },
+          rot: { x: 20, y: -20, z: 0 },
+          pos: {
+            x: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+            y: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+            z: this.diff * Math.sin((360 * Math.random() * Math.PI) / 180),
+          },
+        }),
+      );
+      this.calc.push({
+        x: 360 * Math.random(),
+        y: 360 * Math.random(),
+        z: 360 * Math.random(),
+      });
 
       this.rotObj = { x: 0, y: 0, z: 0 };
       this.objSz = { x: w / 5, y: h / 5, z: w / 5 };
@@ -238,45 +301,74 @@ const getStars = () => {
           continue;
         }
 
-        const size = i % 10 === 0 ? this.varr[i].transOut.p * 3 : this.varr[i].transOut.p * 2; // Larger size for every 10th star
+        let size;
+
+        if (i === this.varr.length - 1) {
+          size = 30; // North star
+        } else if (i === this.varr.length - 2) {
+          size = 10; // Tobi star
+        } else if (i === this.varr.length - 3) {
+          size = 10; // Shopify bag star
+        } else {
+          size = 2; // Regular stars
+        }
 
         const g = this.$.createRadialGradient(
           this.varr[i].transOut.x,
           this.varr[i].transOut.y,
-          this.varr[i].transOut.p,
+          (this.varr[i].transOut.p * size) / 3,
           this.varr[i].transOut.x,
           this.varr[i].transOut.y,
-
-          // this.varr[i].transOut.p * 2,
-          size,
+          this.varr[i].transOut.p * size,
         );
+
         this.$.globalCompositeOperation = 'lighter';
 
-        /*
-         * g.addColorStop(0, 'hsla(255, 255%, 255%, 1)');
-         * g.addColorStop(0.5, 'hsla(' + (i + 2) + ',85%, 40%,1)');
-         * g.addColorStop(1, 'hsla(' + i + ',85%, 40%,.5)');
-         */
-        /*
-         * g.addColorStop(0, 'hsla(0, 0%, 100%, 1)'); // Pure white
-         * g.addColorStop(0, 'hsla(120, 100%, 50%, 1)'); // Green
-         * g.addColorStop(0.5, 'hsla(' + (i + 2) + ',85%, 40%,1)');
-         * g.addColorStop(0.75, 'hsla(280, 100%, 50%, 1)'); // Purple
-         * g.addColorStop(1, 'hsla(' + i + ',85%, 40%,.5)');
-         */
-        if (i % 10 === 0) {
-          // Every 10th star will be larger and green
-          g.addColorStop(0, 'hsla(120, 100%, 50%, 0.8)'); // Pure green
-          // g.addColorStop(0, 'hsla(120, 100%, 100%, 1)'); // Bright white-green center
-          g.addColorStop(1, 'hsla(120, 100%, 40%, 0)'); // Faded green
-        } else {
-          // Regular stars
-          g.addColorStop(0, 'hsla(0, 0%, 100%, 1)'); // Pure white
-          g.addColorStop(0, 'hsla(120, 100%, 50%, 1)'); // Green
-          g.addColorStop(0.5, 'hsla(' + (i + 2) + ',85%, 40%,1)');
+        if (i === this.varr.length - 1) {
+          // North star colors - updated to Shopify green
+          g.addColorStop(0, 'hsla(89, 50%, 80%, 1)'); // Light green
+          g.addColorStop(0.3, 'hsla(89, 62%, 52%, 1)'); // Main Shopify green (#96bf48)
+          g.addColorStop(0.6, 'hsla(89, 62%, 42%, 0.5)'); // Darker green
+          g.addColorStop(1, 'hsla(89, 62%, 32%, 0)'); // Darkest green, faded
+        } else if (i === this.varr.length - 2 || i === this.varr.length - 3) {
+          // Tobi and Shopify bag stars colors
+          g.addColorStop(0, 'hsla(89, 50%, 80%, 1)'); // Light green
+          g.addColorStop(0.3, 'hsla(89, 62%, 52%, 1)'); // Main Shopify green (#96bf48)
+          g.addColorStop(0.6, 'hsla(89, 62%, 42%, 0.5)'); // Darker green
+          g.addColorStop(1, 'hsla(89, 62%, 32%, 0)'); // Darkest green, faded
 
-          // g.addColorStop(0.75, 'hsla(280, 100%, 50%, 1)'); // Purple
-          g.addColorStop(1, 'hsla(' + i + ',85%, 40%,.5)');
+          // Draw the glow
+          this.$.fillStyle = g;
+          this.$.beginPath();
+          this.$.arc(
+            this.varr[i].transOut.x,
+            this.varr[i].transOut.y,
+            this.varr[i].transOut.p * size,
+            0,
+            Math.PI * 2,
+            false,
+          );
+          this.$.fill();
+          this.$.closePath();
+
+          // Draw the appropriate image
+          const imgSize = this.varr[i].transOut.p * size * 1.5;
+          this.$.globalCompositeOperation = 'source-over';
+
+          const image = i === this.varr.length - 2 ? this.shopImage : this.bagImage;
+          this.$.drawImage(
+            image,
+            this.varr[i].transOut.x - imgSize / 2,
+            this.varr[i].transOut.y - imgSize / 2,
+            imgSize,
+            imgSize,
+          );
+          continue;
+        } else {
+          // Regular star colors
+          g.addColorStop(0, 'hsla(0, 0%, 100%, 1)'); // Pure white
+          g.addColorStop(0.5, 'hsla(0, 0%, 100%, 0.5)'); // Semi-transparent white
+          g.addColorStop(1, 'hsla(0, 0%, 100%, 0)'); // Transparent
         }
 
         this.$.fillStyle = g;
@@ -284,7 +376,7 @@ const getStars = () => {
         this.$.arc(
           this.varr[i].transOut.x,
           this.varr[i].transOut.y,
-          this.varr[i].transOut.p * 2,
+          this.varr[i].transOut.p * size,
           0,
           Math.PI * 2,
           false,
