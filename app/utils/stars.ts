@@ -273,9 +273,9 @@ const getStars = () => {
     Build.prototype.draw = function () {
       this.$.clearRect(0, 0, this.canvas.width, this.canvas.height);
       cam.upd();
-      this.rotObj.x += 0.025;
-      this.rotObj.y += 0.025;
-      this.rotObj.z += 0.025;
+      this.rotObj.x += 0.01;
+      this.rotObj.y += 0.01;
+      this.rotObj.z += 0.01;
 
       for (let i = 0; i < this.varr.length; i++) {
         for (const val in this.calc[i]) {

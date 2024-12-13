@@ -16,10 +16,12 @@ export const loader = () => json({});
 
 export default function Index() {
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="h-full w-full">
       <NightSky>
-        <Header />
-        <ClientOnly fallback={<BaseChat />}>{() => <Chat />}</ClientOnly>
+        <div className="flex flex-col">
+          <Header />
+          <ClientOnly fallback={<BaseChat />}>{() => <Chat />}</ClientOnly>
+        </div>
       </NightSky>
     </div>
   );

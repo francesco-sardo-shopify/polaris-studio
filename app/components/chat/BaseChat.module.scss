@@ -1,7 +1,8 @@
 .BaseChat {
   position: absolute;
-  top: 0;
+  top: var(--header-height);
   background: transparent;
+  height: calc(100% - var(--header-height));
 
   &[data-chat-visible='false'] {
     --workbench-inner-width: 100%;
@@ -97,6 +98,10 @@
   filter: blur(60px);
   border-radius: 100%;
   background: var(--ray-gradient);
+}
+
+.PromptContainer {
+  background-color: #17171791;
 }
 
 .PromptEffectContainer {
