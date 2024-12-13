@@ -20,6 +20,7 @@ import { ExamplePrompts } from '~/components/chat/ExamplePrompts';
 
 import FilePreview from './FilePreview';
 import { SpeechRecognitionButton } from '~/components/chat/SpeechRecognition';
+import { PolarisStudioIcon } from '~/components/ui/PolarisStudioIcon';
 
 const TEXTAREA_MIN_HEIGHT = 76;
 
@@ -223,9 +224,14 @@ export const BaseChat = React.forwardRef<HTMLDivElement, BaseChatProps>(
           <div className={classNames(styles.Chat, 'flex flex-col flex-grow lg:min-w-[var(--chat-min-width)] h-full')}>
             {!chatStarted && (
               <div id="intro" className="mt-[16vh] max-w-chat mx-auto text-center px-4 lg:px-0">
-                <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary mb-4 animate-fade-in">
-                  Polaris Studio
-                </h1>
+                <div className="flex items-center justify-center mb-4">
+                  <div className={classNames(['w-15 h-15 mr-2 mb-2 animate-fade-in', styles.Icon])}>
+                    <PolarisStudioIcon />
+                  </div>
+                  <h1 className="text-3xl lg:text-6xl font-bold text-bolt-elements-textPrimary animate-fade-in">
+                    Polaris Studio
+                  </h1>
+                </div>
                 <p className="text-md lg:text-xl mb-8 text-bolt-elements-textSecondary animate-fade-in animation-delay-200">
                   "Anything that Shopifolk can imagine, Polaris Studio can make real."
                 </p>
